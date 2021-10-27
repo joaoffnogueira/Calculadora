@@ -16,7 +16,6 @@
         android:layout_columnSpan="4"
         android:autofillHints="false"
         android:inputType="none"
-        android:text="Entrada"
         android:textAlignment="textEnd"
         android:textSize="35sp"
         tools:ignore="LabelFor" />
@@ -28,7 +27,6 @@
         android:layout_columnSpan="4"
         android:autofillHints="false"
         android:inputType="none"
-        android:text="Saída"
         android:textAlignment="textEnd"
         android:textSize="35sp"
         tools:ignore="LabelFor" />

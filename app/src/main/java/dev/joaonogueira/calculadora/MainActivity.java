@@ -6,15 +6,15 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fathzer.soft.javaluator.DoubleEvaluator;
-
+import com.fathzer.soft.javaluator.DoubleEvaluator;//O Javaluator é uma lib java que permite avaliar expressões matemáticas completas em uma string
+//foi adotado pois conforme as teclas vão sendo digitadas, concatenamos os valores e as operações e o Javaluator resolve a expressão toda.
 public class MainActivity extends AppCompatActivity {
 
-    private EditText e1,e2;
-    private int count=0;
-    private String expression="";
-    private String text="";
-    private Double result=0.0;
+    private EditText e1,e2; //dois campos EditText, um para a entrada da expressão matemática e outro para a saída
+    private int ponto =0;//para controlar que haja apenas um ponto em cada número
+    private String expressao ="";//expressão matemática
+    private String textoRestante ="";//para juntar um resultado anterior a uma nova expressão
+    private Double resultado =0.0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
         e1=(EditText)findViewById(R.id.editText1);
         e2=(EditText)findViewById(R.id.editText2);
 
-        e2.setText("0");
+        e2.setText("0");//ao criar a view, o valor do campo de resultado é zero
     }
 
     public void onClick(View v)
     {
-        switch(v.getId())
+        switch(v.getId())//aqui, cada tecla pressionada adicionará seu valor à expressão matemática
         {
             case R.id.num0:
                 e2.setText(e2.getText()+"0");
@@ -72,59 +72,57 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.ponto:
-                if(count==0 && e2.length()!=0)
+                if(ponto ==0 && e2.length()!=0)//aqui avalia-se se não há ponto no número, antes de adicionar um novo
                 {
                     e2.setText(e2.getText()+".");
-                    count++;
+                    ponto++;
                 }
                 break;
 
-            case R.id.ca:
+            case R.id.ca://função de limpar os valores
                 e1.setText("");
                 e2.setText("");
-                count=0;
-                expression="";
+                ponto =0;
+                expressao ="";
                 break;
 
             case R.id.somar:
-                operationClicked("+");
+                clicar("+");
                 break;
 
             case R.id.subtrair:
-                operationClicked("-");
+                clicar("-");
                 break;
 
             case R.id.dividir:
-                operationClicked("/");
+                clicar("/");
                 break;
 
             case R.id.multiplicar:
-                operationClicked("*");
+                clicar("*");
                 break;
 
-            case R.id.resultado:
-                /*for more knowledge on DoubleEvaluator and its tutorial go to the below link
-                http://javaluator.sourceforge.net/en/home/*/
-                if(e2.length()!=0)
+            case R.id.resultado://aqui verificamos se:
+                if(e2.length()!=0)//há um valor anterior de saída para ser reaproveitado em uma nova conta
                 {
-                    text=e2.getText().toString();
-                    expression=e1.getText().toString()+text;
+                    textoRestante =e2.getText().toString();
+                    expressao =e1.getText().toString()+ textoRestante;//
                 }
-                e1.setText("");
-                if(expression.length()==0)
-                    expression="0.0";
+                e1.setText("");//há uma expressão para ser avaliada,
+                if(expressao.length()==0)
+                    expressao ="0.0";
                 DoubleEvaluator evaluator = new DoubleEvaluator();
                 try
                 {
-                    //evaluate the expression
-                    result=new DoubleEvaluator().evaluate(expression);
-                    e2.setText(result+"");
+                    //O objeto DoubleEvaluator realiza a avaliação da expressão matemática e devolve o resultado
+                    resultado =new DoubleEvaluator().evaluate(expressao);
+                    e2.setText(resultado +"");
                 }
-                catch (Exception e)
+                catch (Exception e)//e se a expressão é matemáticamente válida
                 {
-                    e2.setText("Invalid Expression");
+                    e2.setText("Expressão inválida");
                     e1.setText("");
-                    expression="";
+                    expressao ="";
                     e.printStackTrace();
                 }
                 break;
@@ -132,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void operationClicked(String op)
+    private void clicar(String op)//função que monta a string da expressão matemática conforme os botões são clicados
     {
         if(e2.length()!=0)
         {
             String text=e2.getText().toString();
             e1.setText(e1.getText() + text+op);
             e2.setText("");
-            count=0;
+            ponto =0;
         }
         else
         {
